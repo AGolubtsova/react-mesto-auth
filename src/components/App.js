@@ -23,6 +23,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние авторизации
+  const [email, setEmail] = useState(''); // Хранение и передача почты
+  
+  const [tooltipOpen, setTooltipOpen] = useState(false); // Состояние Tooltip
+
   // Рендер карточек и данных пользователя
   useEffect(() => {
     Api.getAllNeededData()
@@ -154,15 +159,29 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className = "page">
         <Header />
-        <Main 
-          onEditAvatar = {handleEditAvatarClick}
-          onEditProfile = {handleEditProfileClick}
-          onAddPlace = {handleAddPlaceClick}
-          onCardClick = {handleCardClick}
-          onCardLike = {handleCardLike}
-          onCardDeleteRequest={handleCardDeleteRequest}
-          cards = {cards}
-        />
+        <Routes>
+          <Router path='/' element={<ProtectedRoute 
+            isLoggedIn={isLoggedIn} 
+            component={Main}
+            cards = {cards}
+            onEditAvatar = {handleEditAvatarClick}
+            onEditProfile = {handleEditProfileClick}
+            onAddPlace = {handleAddPlaceClick}
+            onCardClick = {handleCardClick}
+            onCardLike = {handleCardLike}
+            onCardDeleteRequest={handleCardDeleteRequest} />} 
+          />
+          <Router path='/sign-in' element={<Login 
+            onLogin={handleLogin}
+            onClose = {closeAllPopups} />}
+          />
+          <Router path='/sign-up' element={<Register
+            onRegister={handleRegister}
+            onClose = {closeAllPopups} />}
+          />
+          <Route path="*" element={loggedIn ? <Navigate to="/mesto" /> : <Navigate to="/sign-in" />}/>
+        </Routes>
+        
         <Footer />
         <EditProfilePopup 
           isOpen = {isEditProfilePopupOpen}
