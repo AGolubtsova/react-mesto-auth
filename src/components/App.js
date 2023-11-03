@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'; 
 
 import Header from './Header';
 import Main from './Main';
@@ -25,6 +26,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние авторизации
   const [email, setEmail] = useState(''); // Хранение и передача почты
+  const navigate = useNavigate();//useHistory
   
   const [tooltipOpen, setTooltipOpen] = useState(false); // Состояние Tooltip
 
@@ -160,7 +162,7 @@ function App() {
       <div className = "page">
         <Header />
         <Routes>
-          <Router path='/' element={<ProtectedRoute 
+          <Route path='/' element={<ProtectedRoute 
             isLoggedIn={isLoggedIn} 
             component={Main}
             cards = {cards}
@@ -171,11 +173,11 @@ function App() {
             onCardLike = {handleCardLike}
             onCardDeleteRequest={handleCardDeleteRequest} />} 
           />
-          <Router path='/sign-in' element={<Login 
+          <Route path='/sign-in' element={<Login 
             onLogin={handleLogin}
             onClose = {closeAllPopups} />}
           />
-          <Router path='/sign-up' element={<Register
+          <Route path='/sign-up' element={<Register
             onRegister={handleRegister}
             onClose = {closeAllPopups} />}
           />
