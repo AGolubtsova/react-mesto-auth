@@ -11,8 +11,12 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmPopup from './ConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
+import Register from './Register';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+
+import success from '../images/success.svg';
+import error from '../images/error.svg';
 
 import Api from '../utils/Api';
 
@@ -28,6 +32,7 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false); // Состояние авторизации
   const [email, setEmail] = useState(''); // Хранение и передача почты
+  const [message, setMessage] = useState({ imgPath: '', text: '' });
   const navigate = useNavigate();//useHistory
   
   const [tooltipOpen, setTooltipOpen] = useState(false); // Состояние Tooltip
@@ -149,8 +154,9 @@ function App() {
     }
   }
 
-  const handleLogin = ({ password, email }) => {
-    return auth.authorize({ password, email })
+  // Функция авторизации пользователя (при неудаче всплывает popup через Tooltip)
+  const handleLogin = (password, email) => {
+    return auth.authorize(password, email)
     .then((res) => {
       if (res.token) {
         setLoggedIn(true);
@@ -162,10 +168,20 @@ function App() {
     .catch( (err) => { 
       console.log(`Возникла ошибка при авторизации, ${err}`);
       setTooltipOpen(true); 
-      setStatus(false) })
-   }
+    })
+  }
 
-  
+  // Функция регистрации пользователя (всплывает popup через Tooltip)
+  const handleRegister = (password, email) => {
+    return auth.register(password, email)
+      .then((res) => {
+        setEmail(res.data.email)
+        setMessage({ imgPath: success, text: 'Вы успешно зарегистрировались!' })
+      })
+      .catch(() => setMessage({ imgPath: error, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
+      .finally(() => setIsInfoTooltipOpen(true))
+  }
+
   useEffect(() => {
     window.addEventListener('keydown', handleEscClose);
     window.addEventListener('mousedown', handleOverlayClose);

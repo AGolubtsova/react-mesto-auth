@@ -1,7 +1,7 @@
 import React, { useState }  from 'react';
 import SignPage from './SignPage';
 
-export default function Login ({ onLogin }) {
+export default function Register({ onRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
@@ -10,19 +10,19 @@ export default function Login ({ onLogin }) {
 
   function handleSubmit (e) {
     e.preventDefault();
-    onLogin({password, email});
+    onRegister({password, email});
     setPassword('');
     setEmail('');
   }
   
   return (
-    <div className = "login">
+    <div className = "register">
       <SignPage
-        formName="login"
+        formName="register"
         onSubmit={handleSubmit}
-        title="Вход"
-        buttonText='Войти'
-        aria-label="кнопка войти"
+        title="Регистрация"
+        buttonText="Зарегистрироваться"
+        aria-label="кнопка зарегистрироваться"
       >
         <input
           className="sign-page__input"
