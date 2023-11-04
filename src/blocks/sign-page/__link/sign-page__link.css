@@ -1,0 +1,14 @@
+.sign-page__link {
+  font-size: 14px;
+  line-height: 16.94px;
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+  transition: .3s;
+  text-align: center;
+}
+
+.sign-page__link:hover {
+  cursor: pointer;
+  opacity: .6;
+}

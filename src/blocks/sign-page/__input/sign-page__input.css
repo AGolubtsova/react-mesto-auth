@@ -1,0 +1,21 @@
+.sign-page__input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+  margin-bottom: 30px;
+  padding: 0 0 13px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #fff;
+  min-height: 27px;
+  box-sizing: border-box;
+}
+
+.sign-page:last-of-type {
+  margin-bottom: 0;
+}
+  
+.sign-page::placeholder {
+  color: #CCCCCC;
+}   

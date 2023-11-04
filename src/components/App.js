@@ -10,6 +10,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmPopup from './ConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
+import Login from './Login';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -25,7 +26,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Состояние авторизации
+  const [loggedIn, setLoggedIn] = useState(false); // Состояние авторизации
   const [email, setEmail] = useState(''); // Хранение и передача почты
   const navigate = useNavigate();//useHistory
   
@@ -147,6 +148,23 @@ function App() {
       closeAllPopups();
     }
   }
+
+  const handleLogin = ({ password, email }) => {
+    return auth.authorize({ password, email })
+    .then((res) => {
+      if (res.token) {
+        setLoggedIn(true);
+        setEmail(email);
+        localStorage.setItem('jwt', res.token);
+        navigate.push('/');
+      };
+    })
+    .catch( (err) => { 
+      console.log(`Возникла ошибка при авторизации, ${err}`);
+      setTooltipOpen(true); 
+      setStatus(false) })
+   }
+
   
   useEffect(() => {
     window.addEventListener('keydown', handleEscClose);
@@ -164,7 +182,7 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<ProtectedRoute 
-            isLoggedIn={isLoggedIn} 
+            isLoggedIn={loggedIn} 
             component={Main}
             cards = {cards}
             onEditAvatar = {handleEditAvatarClick}

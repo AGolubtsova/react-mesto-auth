@@ -1,0 +1,26 @@
+.sign-page__button {
+  margin-top: 216px;
+  margin-bottom: 15px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  width: 100%;
+  min-height: 50px;
+  background-color: #fff;
+  transition: .2s;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21.78px;
+}
+
+.sign-page__button:hover {
+  cursor: pointer;
+  opacity: 0.85;
+}
+  
+@media screen and (max-width: 400px) {
+  .sign-page__button {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
