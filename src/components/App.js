@@ -20,6 +20,7 @@ import success from '../images/success.svg';
 import error from '../images/error.svg';
 
 import Api from '../utils/Api';
+import * as auth from '../utils/auth';
 
 function App() {
   // Стейты
@@ -162,7 +163,7 @@ function App() {
         setLoggedIn(true);
         setEmail(email);
         localStorage.setItem('jwt', res.token);
-        navigate.push('/');
+        navigate("/main", { replace: true });
       };
     })
     .catch( (err) => { 
@@ -175,8 +176,9 @@ function App() {
   const handleRegister = (password, email) => {
     return auth.register(password, email)
       .then((res) => {
-        setEmail(res.data.email)
-        setMessage({ imgPath: success, text: 'Вы успешно зарегистрировались!' })
+        setEmail(res.data.email);
+        setMessage({ imgPath: success, text: 'Вы успешно зарегистрировались!' });
+        navigate("/sign-in", { replace: true });
       })
       .catch(() => setMessage({ imgPath: error, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
       .finally(() => setIsInfoTooltipOpen(true))
@@ -185,6 +187,8 @@ function App() {
   function onSignOut() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
+    navigate("/sign-in", { replace: true });
+    setEmail(null);
   }
 
   useEffect(() => {
@@ -226,7 +230,7 @@ function App() {
             onClose = {closeAllPopups}
             isInfoTooltipOpen={isInfoTooltipOpen} />}
           />
-          <Route path="*" element={loggedIn ? <Navigate to="/mesto" /> : <Navigate to="/sign-in" />}/>
+          <Route path="/" element={loggedIn ? <Navigate to="/mesto" replace/> : <Navigate to="/sign-in" replace/>}/>
         </Routes>
         <Footer />
         <InfoTooltip
