@@ -167,7 +167,7 @@ function App() {
     })
     .catch( (err) => { 
       console.log(`Возникла ошибка при авторизации, ${err}`);
-      setTooltipOpen(true); 
+      setIsInfoTooltipOpen(true); 
     })
   }
 
@@ -180,6 +180,11 @@ function App() {
       })
       .catch(() => setMessage({ imgPath: error, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
       .finally(() => setIsInfoTooltipOpen(true))
+  }
+
+  function onSignOut() {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
   }
 
   useEffect(() => {
@@ -195,7 +200,11 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className = "page">
-        <Header />
+        <Header
+          loggedIn = {loggedIn}
+          email = {email}
+          onSignOut = {onSignOut} 
+        />
         <Routes>
           <Route path='/' element={<ProtectedRoute 
             isLoggedIn={loggedIn} 

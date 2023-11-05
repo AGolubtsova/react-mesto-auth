@@ -1,9 +1,12 @@
 .header {
   display: flex;
   max-width: 880px;
-  margin: 0 auto;
-  padding: 45px 0 0 0;
   border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+  margin: 45px auto 60px auto;
+  padding: 0 0 41px;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 1200px) {
@@ -20,9 +23,9 @@
 
 @media screen and (max-width: 480px) {
   .header {
-    padding-top: 28px;
+    padding-bottom: 31.6px;
     width: 100%;
-    margin: 0;
+    margin: 28px auto 42px auto;
   }
 }  
   

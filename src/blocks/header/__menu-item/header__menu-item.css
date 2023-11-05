@@ -1,0 +1,13 @@
+.header__menu-item {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #fff;
+  transition: .3s;
+  text-decoration: none;
+}
+
+.header__menu-item:hover {
+  opacity: .6;
+  cursor: pointer;
+}
