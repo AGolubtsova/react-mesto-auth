@@ -12,6 +12,7 @@ import ConfirmPopup from './ConfirmPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -30,12 +31,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [loggedIn, setLoggedIn] = useState(false); // Состояние авторизации
-  const [email, setEmail] = useState(''); // Хранение и передача почты
+  const [loggedIn, setLoggedIn] = useState(false); //Состояние авторизации
+  const [email, setEmail] = useState(''); //Хранение и передача почты
   const [message, setMessage] = useState({ imgPath: '', text: '' });
   const navigate = useNavigate();//useHistory
-  
-  const [tooltipOpen, setTooltipOpen] = useState(false); // Состояние Tooltip
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false); //Состояние Tooltip
 
   // Рендер карточек и данных пользователя
   useEffect(() => {
@@ -214,12 +214,19 @@ function App() {
           />
           <Route path='/sign-up' element={<Register
             onRegister={handleRegister}
-            onClose = {closeAllPopups} />}
+            onClose = {closeAllPopups}
+            isInfoTooltipOpen={isInfoTooltipOpen} />}
           />
           <Route path="*" element={loggedIn ? <Navigate to="/mesto" /> : <Navigate to="/sign-in" />}/>
         </Routes>
-        
         <Footer />
+        <InfoTooltip
+          name='tooltip'
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          title={message.text}
+          imgPath={message.imgPath}
+        />
         <EditProfilePopup 
           isOpen = {isEditProfilePopupOpen}
           onClose = {closeAllPopups}
