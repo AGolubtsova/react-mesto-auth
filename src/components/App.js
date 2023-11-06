@@ -183,7 +183,7 @@ function App() {
         setLoggedIn(true);
         setEmail(email);
         localStorage.setItem('jwt', res);
-        navigate("/main", { replace: true });
+        navigate("/", { replace: true });
       };
     })
     .catch( (err) => { 
@@ -225,7 +225,6 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className = "page">
         <Routes>
-          <Route path="*" element={loggedIn ? <Navigate to="/main" replace/> : <Navigate to="/sign-in" replace/>}/>
           <Route path="/sign-up" element={
             <>
               <Header title="Войти" url="/sign-in" />
@@ -238,7 +237,7 @@ function App() {
                <Login onLogin={handleLogin} onClose = {closeAllPopups}/> 
              </>}
           />
-          <Route path="/main" element={
+          <Route path="/" element={
             <>
               <Header title="Выйти" url="/sign-in" onSignOut={onSignOut} email={email}/>
               <ProtectedRoute 
