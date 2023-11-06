@@ -1,5 +1,6 @@
 import React, { useState }  from 'react';
 import SignPage from './SignPage';
+import { Link } from 'react-router-dom';
 
 export default function Register({ onRegister }) {
   const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ export default function Register({ onRegister }) {
 
   function handleSubmit (e) {
     e.preventDefault();
-    onRegister({password, email});
+    onRegister(password, email);
     setPassword('');
     setEmail('');
   }
@@ -32,19 +33,19 @@ export default function Register({ onRegister }) {
           value={email || ''}
           name="email" 
           placeholder="Email" 
-          minLength="10" 
+          minLength="6" 
           maxLength="40" 
           required
         />
         <input
-          className="login__input"
+          className="sign-page__input"
           id="passwd-input" 
           type="password" 
           onChange={handlePassword} 
           value={password || ''}
           name="password"
           placeholder="Пароль"
-          minLength="10"
+          minLength="8"
           maxLength="20"
           required 
         />

@@ -160,6 +160,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
     setIsConfirmPopupOpen({ card: {}, isOpen: false });
+    setIsInfoTooltipOpen(false);
   };
 
   function handleEscClose(evt) {
@@ -178,11 +179,11 @@ function App() {
   const handleLogin = (password, email) => {
     return auth.authorize(password, email)
     .then((res) => {
-      if (res.token) {
+      if (res) {
         setLoggedIn(true);
         setEmail(email);
-        localStorage.setItem('jwt', res.token);
-        navigate("/", { replace: true });
+        localStorage.setItem('jwt', res);
+        navigate("/main", { replace: true });
       };
     })
     .catch( (err) => { 
@@ -223,13 +224,8 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className = "page">
-        <Header
-          loggedIn = {loggedIn}
-          email = {email}
-          onSignOut = {onSignOut} 
-        />
         <Routes>
-          <Route path="*" element={loggedIn ? <Navigate to="/" replace/> : <Navigate to="/sign-in" replace/>}/>
+          <Route path="*" element={loggedIn ? <Navigate to="/main" replace/> : <Navigate to="/sign-in" replace/>}/>
           <Route path="/sign-up" element={
             <>
               <Header title="Войти" url="/sign-in" />
@@ -242,12 +238,11 @@ function App() {
                <Login onLogin={handleLogin} onClose = {closeAllPopups}/> 
              </>}
           />
-
-          <Route path="/" element={
+          <Route path="/main" element={
             <>
-              <Header title="Выйти" url="/signi-n" onSignOut={onSignOut} email={email}/>
+              <Header title="Выйти" url="/sign-in" onSignOut={onSignOut} email={email}/>
               <ProtectedRoute 
-                isLoggedIn={loggedIn} 
+                loggedIn={loggedIn} 
                 component={Main}
                 cards = {cards}
                 onEditAvatar = {handleEditAvatarClick}
@@ -258,9 +253,7 @@ function App() {
                 onCardDeleteRequest={handleCardDeleteRequest} />
                
             </>}
-          />
-
-          
+          /> 
         </Routes>
         <Footer />
         <InfoTooltip

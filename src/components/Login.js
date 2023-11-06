@@ -10,7 +10,7 @@ export default function Login ({ onLogin }) {
 
   function handleSubmit (e) {
     e.preventDefault();
-    onLogin({password, email});
+    onLogin(password, email);
     setPassword('');
     setEmail('');
   }
@@ -32,19 +32,19 @@ export default function Login ({ onLogin }) {
           value={email || ''}
           name="email" 
           placeholder="Email" 
-          minLength="10" 
+          minLength="6" 
           maxLength="40" 
           required
         />
         <input
-          className="login__input"
+          className="sign-page__input"
           id="passwd-input" 
           type="password" 
           onChange={handlePassword} 
           value={password || ''}
           name="password"
           placeholder="Пароль"
-          minLength="10"
+          minLength="8"
           maxLength="20"
           required 
         />

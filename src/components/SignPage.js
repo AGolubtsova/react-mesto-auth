@@ -19,7 +19,7 @@ export default function SignPage ({formName, onSubmit, title, children, buttonTe
           </button>
           {
             formName === "register" &&
-            <Link className="sign-page__link" to="/sign-up">Уже зарегистрированы? Войти</Link>
+            <Link className="sign-page__link" to="/sign-in">Уже зарегистрированы? Войти</Link>
           }
         </form>
     </div>

@@ -11,7 +11,7 @@ export default function Header({ loggedIn, email, url, title, onSignOut }) {
             <p className = "header__email">{email}</p>
             <Link 
               to={url} 
-              className = {`header__menu-item ${loggedIn && 'header__menu-item_state_active'}`}
+              className = "header__menu-item header__menu-item_state_active"
               onClick={onSignOut}
             >
               {title}

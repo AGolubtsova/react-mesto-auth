@@ -1,8 +1,9 @@
 .header__info {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 24px;
+    color: #a9a9a9;
+    display: flex;
+    column-gap: 24px;
+    margin: 10px 0 0 0;
+    height: fit-content;
 }
 
 @media screen and (max-width: 400px) {
