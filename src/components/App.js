@@ -50,6 +50,25 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    handleTokenCheck();
+  }, []);
+
+  const handleTokenCheck = () => {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      auth.checkToken(jwt)
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          navigate("/", { replace: true });
+        }
+      })
+      .catch((err) => console.log(err))
+    }
+  };
+
   // Обработчик для увеличения изображения
   const handleCardClick = (card) => {
       setSelectedCard(card);
@@ -163,7 +182,7 @@ function App() {
         setLoggedIn(true);
         setEmail(email);
         localStorage.setItem('jwt', res.token);
-        navigate("/main", { replace: true });
+        navigate("/", { replace: true });
       };
     })
     .catch( (err) => { 
@@ -210,27 +229,38 @@ function App() {
           onSignOut = {onSignOut} 
         />
         <Routes>
-          <Route path='/' element={<ProtectedRoute 
-            isLoggedIn={loggedIn} 
-            component={Main}
-            cards = {cards}
-            onEditAvatar = {handleEditAvatarClick}
-            onEditProfile = {handleEditProfileClick}
-            onAddPlace = {handleAddPlaceClick}
-            onCardClick = {handleCardClick}
-            onCardLike = {handleCardLike}
-            onCardDeleteRequest={handleCardDeleteRequest} />} 
+          <Route path="*" element={loggedIn ? <Navigate to="/" replace/> : <Navigate to="/sign-in" replace/>}/>
+          <Route path="/sign-up" element={
+            <>
+              <Header title="Войти" url="/sign-in" />
+              <Register onRegister={handleRegister} onClose={closeAllPopups} isInfoTooltipOpen={isInfoTooltipOpen} />
+            </>}
           />
-          <Route path='/sign-in' element={<Login 
-            onLogin={handleLogin}
-            onClose = {closeAllPopups} />}
+          <Route path="/sign-in" element={ 
+             <> 
+               <Header title="Регистрация" url="/sign-up" /> 
+               <Login onLogin={handleLogin} onClose = {closeAllPopups}/> 
+             </>}
           />
-          <Route path='/sign-up' element={<Register
-            onRegister={handleRegister}
-            onClose = {closeAllPopups}
-            isInfoTooltipOpen={isInfoTooltipOpen} />}
+
+          <Route path="/" element={
+            <>
+              <Header title="Выйти" url="/signi-n" onSignOut={onSignOut} email={email}/>
+              <ProtectedRoute 
+                isLoggedIn={loggedIn} 
+                component={Main}
+                cards = {cards}
+                onEditAvatar = {handleEditAvatarClick}
+                onEditProfile = {handleEditProfileClick}
+                onAddPlace = {handleAddPlaceClick}
+                onCardClick = {handleCardClick}
+                onCardLike = {handleCardLike}
+                onCardDeleteRequest={handleCardDeleteRequest} />
+               
+            </>}
           />
-          <Route path="/" element={loggedIn ? <Navigate to="/mesto" replace/> : <Navigate to="/sign-in" replace/>}/>
+
+          
         </Routes>
         <Footer />
         <InfoTooltip
