@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'; 
+import { Routes, Route, useNavigate } from 'react-router-dom'; 
 
 import Header from './Header';
 import Main from './Main';
@@ -31,6 +31,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});  // Передача данных при увеличении изображения
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); //Переменная для отслеживания состояния загрузки во время ожидания ответа от сервера
 
   const [loggedIn, setLoggedIn] = useState(false); //Состояние авторизации
   const [email, setEmail] = useState(''); //Хранение и передача почты
@@ -45,9 +46,7 @@ function App() {
         setCards(items);
         setCurrentUser(user);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -65,7 +64,7 @@ function App() {
           navigate("/", { replace: true });
         }
       })
-      .catch((err) => console.log(err))
+      .catch(console.error)
     }
   };
 
@@ -84,9 +83,7 @@ function App() {
           state.map((c) => (c._id === card._id ? newCard : c))
         );
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error);
   }
 
   function handleCardDeleteRequest(card) {
@@ -111,10 +108,10 @@ function App() {
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
+        setIsLoading(true);
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   // Обработчик изменения аватара
@@ -123,10 +120,10 @@ function App() {
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
+        setIsLoading(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   // Обработчик добавления карточки
@@ -135,10 +132,10 @@ function App() {
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
+        setIsLoading(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
   
   function handleEditAvatarClick() {
@@ -163,7 +160,10 @@ function App() {
     setIsInfoTooltipOpen(false);
   };
 
-  function handleEscClose(evt) {
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard || isInfoTooltipOpen
+
+  useEffect(() => {
+     function handleEscClose(evt) {
     if (evt.key === 'Escape') {
       closeAllPopups();
     }
@@ -174,6 +174,16 @@ function App() {
       closeAllPopups();
     }
   }
+    if(isOpen) { // навешиваем только при открытии
+         window.addEventListener('keydown', handleEscClose);
+         window.addEventListener('mousedown', handleOverlayClose);
+      return () => {
+          window.removeEventListener('keydown', handleEscClose);
+          window.removeEventListener('mousedown', handleOverlayClose);
+      }
+    }
+  }, [isOpen]) 
+
 
   // Функция авторизации пользователя (при неудаче всплывает popup через Tooltip)
   const handleLogin = (password, email) => {
@@ -211,16 +221,6 @@ function App() {
     setEmail(null);
   }
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleEscClose);
-    window.addEventListener('mousedown', handleOverlayClose);
-  
-    return () => {
-      window.removeEventListener('keydown', handleEscClose);
-      window.removeEventListener('mousedown', handleOverlayClose);
-    };
-  })
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className = "page">
@@ -249,7 +249,8 @@ function App() {
                 onAddPlace = {handleAddPlaceClick}
                 onCardClick = {handleCardClick}
                 onCardLike = {handleCardLike}
-                onCardDeleteRequest={handleCardDeleteRequest} />
+                onCardDeleteRequest={handleCardDeleteRequest}
+                isLoading = {isLoading} />
                
             </>}
           /> 
@@ -266,16 +267,19 @@ function App() {
           isOpen = {isEditProfilePopupOpen}
           onClose = {closeAllPopups}
           onUpdateUser = {handleUpdateUser}
+          isLoading = {isLoading}
         />
         <EditAvatarPopup 
           isOpen = {isEditAvatarPopupOpen}
           onClose = {closeAllPopups}
           onUpdateAvatar = {handleUpdateAvatar}
+          isLoading = {isLoading}
         /> 
         <AddPlacePopup 
           isOpen = {isAddPlacePopupOpen}
           onClose = {closeAllPopups}
           onUpdatePlace = {handleAddPlaceSubmit}
+          isLoading = {isLoading}
         /> 
         <ConfirmPopup
           card = {isConfirmPopupOpen.card}
@@ -283,7 +287,7 @@ function App() {
           onClose = {closeAllPopups}
           onDelete = {handleCardDelete}
         />
-        <ImagePopup  card = {selectedCard} onClose = {closeAllPopups} />
+        <ImagePopup  card = {selectedCard} onClose = {closeAllPopups}/>
       </div>
     </CurrentUserContext.Provider>
   );

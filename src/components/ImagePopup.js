@@ -1,6 +1,7 @@
 import React from 'react';
 
 function ImagePopup({ card, onClose }) {
+
   return (
     <div
       className = {`popup popup_zoom-picture ${card.link ? "popup_opened" : ""}`}

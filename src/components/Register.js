@@ -1,6 +1,5 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import SignPage from './SignPage';
-import { Link } from 'react-router-dom';
 
 export default function Register({ onRegister }) {
   const [email, setEmail] = useState('');
@@ -12,10 +11,13 @@ export default function Register({ onRegister }) {
   function handleSubmit (e) {
     e.preventDefault();
     onRegister(password, email);
+  }
+
+  useEffect(() => {
     setPassword('');
     setEmail('');
-  }
-  
+  }, []);
+
   return (
     <div className = "register">
       <SignPage

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-export default function AddPlacePopup({ isOpen, onClose, onUpdatePlace }) {
+export default function AddPlacePopup({ isOpen, onClose, onUpdatePlace, isLoading }) {
   const [link, setLink] = useState('');
   const [name, setName] = useState('');
 
@@ -34,7 +34,7 @@ export default function AddPlacePopup({ isOpen, onClose, onUpdatePlace }) {
       isOpen = {isOpen}
       onClose = {onClose}
       onSubmit = {handleSubmit}
-      buttonText = "Создать"
+      buttonText = {isLoading ? 'Создание...' : "Создать"} 
     >
       <input 
         type = "text"

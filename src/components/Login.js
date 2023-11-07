@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import SignPage from './SignPage';
 
 export default function Login ({ onLogin }) {
@@ -11,9 +11,13 @@ export default function Login ({ onLogin }) {
   function handleSubmit (e) {
     e.preventDefault();
     onLogin(password, email);
+  }
+
+  useEffect(() => {
     setPassword('');
     setEmail('');
-  }
+ }, []);
+
   
   return (
     <div className = "login">
