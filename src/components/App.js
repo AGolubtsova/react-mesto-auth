@@ -104,11 +104,11 @@ function App() {
 
   // Обработчик данных пользователя
   function handleUpdateUser(data) {
+    setIsLoading(true);
     Api.sendUserInfo(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
-        setIsLoading(true);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -116,11 +116,11 @@ function App() {
 
   // Обработчик изменения аватара
   function handleUpdateAvatar(avatar) {
+    setIsLoading(true);
     Api.handleUserAvatar(avatar)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
-        setIsLoading(true);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -128,11 +128,11 @@ function App() {
 
   // Обработчик добавления карточки
   function handleAddPlaceSubmit(data) {
+    setIsLoading(true);
     Api.createNewCard(data)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
-        setIsLoading(true);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -160,7 +160,7 @@ function App() {
     setIsInfoTooltipOpen(false);
   };
 
-  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard || isInfoTooltipOpen
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link || isInfoTooltipOpen
 
   useEffect(() => {
      function handleEscClose(evt) {

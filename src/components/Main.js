@@ -44,10 +44,7 @@ function Main ({ cards, onEditAvatar, onEditProfile, onAddPlace, onCardClick, on
         >
         </button>
       </section>
-      {isLoading
-          ? (<p>Загрузка...</p>)
-          : 
-      (<section className = "elements">
+      <section className = "elements">
         {
           cards.map((card) => (
             <Card 
@@ -58,7 +55,7 @@ function Main ({ cards, onEditAvatar, onEditProfile, onAddPlace, onCardClick, on
               onCardDeleteRequest = {onCardDeleteRequest}
             />)
         )}
-      </section>)}
+      </section>
     </main>  
   );
 }
